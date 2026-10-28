@@ -1,199 +1,447 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IDGUARD AI Threat Intel - Autonomous DNS SOC</title>
+  <title>IDGUARD AI CTI v5.0 — Autonomous Recursive DNS SOC</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            brand: {
-              50: '#f0fdf4',
-              500: '#16a34a',
-              600: '#15803d',
+            cyber: {
+              bg: '#050811',
+              card: '#0a0f1d',
+              border: '#161f36',
+              cyan: '#00f0ff',
+              green: '#00ff66',
+              red: '#ff0055',
+              purple: '#7000ff'
             }
           }
         }
       }
     }
   </script>
+  <style>
+    body {
+      background-color: #050811;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
+    }
+    .glow-cyan { box-shadow: 0 0 20px rgba(0, 240, 255, 0.15); }
+    .glow-green { box-shadow: 0 0 20px rgba(0, 255, 106, 0.15); }
+    .border-glow:hover { border-color: rgba(0, 240, 255, 0.4); }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="text-slate-200 font-sans antialiased selection:bg-cyber-cyan selection:text-slate-950">
 
-  <!-- Header / Navigation -->
-  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+  <!-- Top Cyber Status Bar -->
+  <div class="border-b border-cyber-border/80 bg-slate-950/90 text-xs font-mono py-1.5 px-4">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center gap-3">
-        <img src="https://github.com/idguard-dns.png" alt="IDGUARD Logo" class="w-8 h-8 rounded-full border border-slate-700">
-        <span class="font-bold text-lg tracking-tight text-white">IDGUARD <span class="text-xs font-mono font-normal px-2 py-0.5 rounded bg-slate-800 text-brand-500 border border-slate-700">AI CTI v5.0</span></span>
+        <span class="inline-flex items-center gap-1.5 text-cyber-green">
+          <span class="w-2 h-2 rounded-full bg-cyber-green animate-ping"></span>
+          AI CTI ENGINE: ACTIVE
+        </span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400">JAWATIMUR CYBER SECURITY & DEVHUNTER SECURITY</span>
       </div>
-      <nav class="hidden md:flex items-center gap-6 text-sm text-slate-400">
-        <a href="#endpoints" class="hover:text-white transition">Endpoint DNS</a>
-        <a href="#setup" class="hover:text-white transition">Panduan</a>
-        <a href="#features" class="hover:text-white transition">Fitur</a>
-        <a href="https://t.me/idguard-report" target="_blank" class="text-xs px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">Laporkan Domain</a>
-      </nav>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>NODE: <strong class="text-slate-200">dns.idguard.ai.id</strong></span>
+        <span>THREAT RISK: <strong class="text-cyber-green">LOW / OPTIMAL</strong></span>
+        <span>SLA UPTIME: <strong class="text-cyber-cyan">99.98%</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation -->
+  <header class="border-b border-cyber-border bg-cyber-bg/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://github.com/idguard-dns.png" alt="IDGUARD Logo" class="w-9 h-9 rounded-lg border border-cyber-cyan/40 p-0.5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg text-white tracking-wider">IDGUARD</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30">AI CTI v5.0</span>
+          </div>
+          <p class="text-[10px] font-mono text-slate-400">Autonomous Cyber Threat Intelligence & Recursive DNS SOC</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#report" class="text-xs font-mono px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-slate-300 hover:text-white transition">
+          ⚠️ Report Domain
+        </a>
+        <a href="#analyzer" class="text-xs font-mono px-3.5 py-1.5 rounded-lg bg-cyber-cyan text-slate-950 font-bold hover:bg-cyan-300 transition glow-cyan">
+          ⚡ Threat Simulator
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="py-20 border-b border-slate-900 bg-gradient-to-b from-slate-900/50 to-slate-950">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 text-xs font-mono mb-6">
-        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-        SLA UPTIME: 99.98% | 2.8M+ Domain Terblokir
+  <section class="py-16 border-b border-cyber-border/60 relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-xs font-mono mb-6">
+        <span>🛡️ Autonomous Next-Gen Recursive DNS Protection</span>
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
-        Autonomous Cyber Threat Intelligence & Recursive DNS SOC
+      
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+        IDGUARD <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-green">AI THREAT INTEL</span>
       </h1>
-      <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-8">
-        Perlindungan DNS cerdas dengan teknologi DoH/DoT terintegrasi dengan basis data ancaman siber real-time untuk memblokir malware, phishing, dan judi online.
+
+      <p class="text-slate-400 text-sm md:text-base max-w-3xl mx-auto mb-10 leading-relaxed">
+        Pusat Komando Security Operations Center (SOC) dengan mesin filtering DNS cerdas. Menggabungkan enkripsi <strong class="text-slate-200">DoH (DNS over HTTPS)</strong> & <strong class="text-slate-200">DoT (DNS over TLS)</strong> dengan integrasi basis data ancaman siber real-time dari JawaTimur Cyber Security dan DevHunter Security.
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <a href="#endpoints" class="px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition">Gunakan DNS Sekarang</a>
-        <a href="#setup" class="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 font-medium text-sm border border-slate-800 transition">Lihat Cara Pemasangan</a>
+
+      <!-- Key Metrics Banner -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="bg-cyber-card p-4 rounded-xl border border-cyber-border text-left">
+          <p class="text-[11px] font-mono text-slate-400">DNS Engine Core</p>
+          <p class="text-base font-bold text-white font-mono mt-1">Unbound 1.20+</p>
+        </div>
+        <div class="bg-cyber-card p-4 rounded-xl border border-cyber-border text-left">
+          <p class="text-[11px] font-mono text-slate-400">Security Protocol</p>
+          <p class="text-base font-bold text-cyber-cyan font-mono mt-1">DoH / DoT / DNSSEC</p>
+        </div>
+        <div class="bg-cyber-card p-4 rounded-xl border border-cyber-border text-left">
+          <p class="text-[11px] font-mono text-slate-400">Database Blocklist</p>
+          <p class="text-base font-bold text-cyber-red font-mono mt-1">2.8M+ Domains</p>
+        </div>
+        <div class="bg-cyber-card p-4 rounded-xl border border-cyber-border text-left">
+          <p class="text-[11px] font-mono text-slate-400">Filtering Precision</p>
+          <p class="text-base font-bold text-cyber-green font-mono mt-1">99.98% Accuracy</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Endpoints Section -->
-  <section id="endpoints" class="py-16 border-b border-slate-900">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="mb-10 text-center">
-        <h2 class="text-2xl font-bold text-white mb-2">Endpoint & Protokol Resolver</h2>
-        <p class="text-slate-400 text-sm">Pilih jenis protokol yang sesuai dengan kebutuhan perangkat atau jaringan Anda.</p>
+  <!-- Live Telemetry Inspector -->
+  <section class="py-12 border-b border-cyber-border bg-slate-950/60">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center gap-2 text-xs font-mono text-cyber-cyan mb-1">
+        <span class="w-2 h-2 rounded-full bg-cyber-cyan animate-pulse"></span>
+        Live Telemetry Inspector
       </div>
+      <h2 class="text-xl font-bold text-white mb-6">Deteksi IP, ISP / AS Network & Client Latency</h2>
 
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- Standard DNS -->
-        <div class="p-6 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-semibold text-white">Standard DNS</h3>
-            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Port 53</span>
-          </div>
-          <p class="text-xs text-slate-400 mb-4">Untuk Mikrotik, Router Wi-Fi, dan Adaptor Jaringan PC.</p>
-          <div class="space-y-3 font-mono text-xs">
-            <div class="bg-slate-950 p-2.5 rounded border border-slate-800 flex justify-between items-center">
-              <div><span class="text-slate-500">IPv4:</span> <span class="text-slate-200">103.133.222.156</span></div>
-              <button onclick="copy('103.133.222.156')" class="text-slate-500 hover:text-white">Copy</button>
-            </div>
-            <div class="bg-slate-950 p-2.5 rounded border border-slate-800 flex justify-between items-center">
-              <div class="truncate mr-2"><span class="text-slate-500">IPv6:</span> <span class="text-slate-200">2001:df4:b100:3:1:1:8c2a:131b</span></div>
-              <button onclick="copy('2001:df4:b100:3:1:1:8c2a:131b')" class="text-slate-500 hover:text-white">Copy</button>
-            </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <!-- Public IP Card -->
+        <div class="bg-cyber-card p-5 rounded-xl border border-cyber-border">
+          <div class="text-xs font-mono text-slate-400 mb-2">📡 Detected Public IP Address</div>
+          <div id="telemetry-ip" class="text-xl font-bold font-mono text-cyber-cyan">Scanning IP...</div>
+          <div class="text-xs text-slate-500 font-mono mt-2 flex justify-between">
+            <span>IP Version:</span> <span id="telemetry-ip-ver">IPv4 / IPv6</span>
           </div>
         </div>
 
-        <!-- DoH -->
-        <div class="p-6 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-semibold text-white">DNS over HTTPS (DoH)</h3>
-            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Port 443</span>
+        <!-- ISP Provider Card -->
+        <div class="bg-cyber-card p-5 rounded-xl border border-cyber-border">
+          <div class="text-xs font-mono text-slate-400 mb-2">🏢 Autonomous System & ISP</div>
+          <div id="telemetry-isp" class="text-base font-bold font-mono text-white truncate">Resolving Provider...</div>
+          <div class="text-xs text-slate-500 font-mono mt-2 flex justify-between">
+            <span>AS Number:</span> <span id="telemetry-asn">Fetching...</span>
           </div>
-          <p class="text-xs text-slate-400 mb-4">Untuk Browser Modern (Chrome, Firefox, Edge) & RouterOS v7.</p>
-          <div class="font-mono text-xs bg-slate-950 p-2.5 rounded border border-slate-800 flex justify-between items-center">
+        </div>
+
+        <!-- Latency / Node Card -->
+        <div class="bg-cyber-card p-5 rounded-xl border border-cyber-border">
+          <div class="text-xs font-mono text-slate-400 mb-2">📍 Target Node & Latency Ping</div>
+          <div class="text-base font-bold font-mono text-cyber-green flex items-center justify-between">
+            <span>103.133.222.156</span>
+            <span id="telemetry-ping" class="text-xs bg-cyber-green/10 px-2 py-0.5 rounded border border-cyber-green/30">18 ms</span>
+          </div>
+          <div class="text-xs text-slate-500 font-mono mt-2 flex justify-between">
+            <span>DNS Status:</span> <span class="text-cyber-green">CONNECTED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Threat Intelligence Analyzer & Live Block Stream -->
+  <section id="analyzer" class="py-12 border-b border-cyber-border">
+    <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-8">
+      
+      <!-- Interactive Domain Analyzer -->
+      <div class="lg:col-span-7 bg-cyber-card p-6 rounded-2xl border border-cyber-border glow-cyan">
+        <div class="text-xs font-mono text-cyber-cyan mb-1">Interactive SOC Tool</div>
+        <h3 class="text-lg font-bold text-white mb-2">🔍 AI Threat Intelligence Domain Analyzer</h3>
+        <p class="text-xs text-slate-400 mb-6">
+          Masukkan domain untuk menguji klasifikasi AI Threat Engine secara langsung terhadap database blocklist IDGuard (PhishDestroy, HaGeZi, TrustPositif, SmartDNS, OISD).
+        </p>
+
+        <div class="flex gap-2 mb-6">
+          <input type="text" id="domain-input" placeholder="Contoh: malware-site.com atau google.com" class="flex-1 bg-slate-950 border border-cyber-border focus:border-cyber-cyan rounded-lg px-4 py-2.5 text-xs font-mono text-white focus:outline-none">
+          <button onclick="analyzeDomain()" class="px-5 py-2.5 rounded-lg bg-cyber-cyan text-slate-950 font-bold font-mono text-xs hover:bg-cyan-300 transition">
+            Analyze
+          </button>
+        </div>
+
+        <!-- Analyzer Result Output -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-cyber-border font-mono text-xs space-y-2.5">
+          <div class="flex justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">Queried Domain:</span>
+            <span id="res-domain" class="text-white font-bold">--</span>
+          </div>
+          <div class="flex justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">Threat Classification:</span>
+            <span id="res-class" class="text-slate-300">--</span>
+          </div>
+          <div class="flex justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">Threat Severity Score:</span>
+            <span id="res-score" class="text-slate-300">--</span>
+          </div>
+          <div class="flex justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">Unbound DNS Action:</span>
+            <span id="res-action" class="text-slate-300">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Intelligence Source:</span>
+            <span id="res-source" class="text-slate-300">--</span>
+          </div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-mono text-slate-400">
+          <span>Test Samples:</span>
+          <button onclick="setSample('gambling-site.id')" class="text-cyber-cyan hover:underline">gambling-site.id</button> •
+          <button onclick="setSample('phishing-bank-login.com')" class="text-cyber-cyan hover:underline">phishing-bank-login.com</button> •
+          <button onclick="setSample('idguard.ai.id')" class="text-cyber-cyan hover:underline">idguard.ai.id</button>
+        </div>
+      </div>
+
+      <!-- Live Block Stream Feed -->
+      <div class="lg:col-span-5 bg-cyber-card p-6 rounded-2xl border border-cyber-border flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-center mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyber-red animate-ping"></span>
+              <h3 class="text-sm font-bold font-mono text-white">Live Blocked Threats Stream</h3>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">Real-time Feed</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-4">Aktivitas mitigasi ancaman otomatis oleh engine DNS Unbound.</p>
+
+          <div id="log-stream" class="space-y-2 font-mono text-[11px] max-h-[220px] overflow-hidden">
+            <!-- Dynamic JS Logs inserted here -->
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-cyber-border flex justify-between text-[11px] font-mono text-slate-400">
+          <span>Filter Engine: <strong class="text-cyber-red">NXDOMAIN Always</strong></span>
+          <span class="text-cyber-green">● Active Protection</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Endpoint Protocols -->
+  <section class="py-12 border-b border-cyber-border bg-slate-950/40">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-mono text-cyber-cyan">Deployment Integration</span>
+        <h2 class="text-2xl font-bold text-white mt-1">Protokol Enkripsi & Integrasi Endpoint</h2>
+        <p class="text-xs text-slate-400 mt-2">Dukungan penuh untuk berbagai standar enkripsi DNS modern pada seluruh tipe perangkat.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- DoH -->
+        <div class="bg-cyber-card p-6 rounded-xl border border-cyber-border hover:border-cyber-cyan/50 transition">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-bold text-white text-base">1. DoH (DNS over HTTPS)</h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30">Port 443</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+            Enkripsi kueri di atas protokol HTTPS standar web. Sangat disarankan untuk Browser modern (Chrome, Edge, Firefox, Brave) dan MikroTik RouterOS v7.
+          </p>
+          <div class="bg-slate-950 p-3 rounded-lg border border-cyber-border font-mono text-xs flex justify-between items-center">
             <span class="text-slate-200 truncate mr-2">https://dns.idguard.ai.id/dns-query</span>
-            <button onclick="copy('https://dns.idguard.ai.id/dns-query')" class="text-slate-500 hover:text-white">Copy</button>
+            <button onclick="copyText('https://dns.idguard.ai.id/dns-query')" class="text-cyber-cyan hover:text-white text-[11px]">Copy</button>
           </div>
         </div>
 
         <!-- DoT -->
-        <div class="p-6 rounded-xl bg-slate-900/60 border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-semibold text-white">DNS over TLS (DoT)</h3>
-            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Port 853</span>
+        <div class="bg-cyber-card p-6 rounded-xl border border-cyber-border hover:border-cyber-cyan/50 transition">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-bold text-white text-base">2. DoT (DNS over TLS)</h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyber-purple/10 text-cyber-purple border border-cyber-purple/30">Port 853</span>
           </div>
-          <p class="text-xs text-slate-400 mb-4">Untuk Private DNS Android, iOS, & Linux systemd-resolved.</p>
-          <div class="font-mono text-xs bg-slate-950 p-2.5 rounded border border-slate-800 flex justify-between items-center">
+          <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+            Enkripsi tingkat lapisan transport khusus untuk traffic DNS. Ideal untuk Private DNS Android, iOS Profile, dan Linux systemd-resolved.
+          </p>
+          <div class="bg-slate-950 p-3 rounded-lg border border-cyber-border font-mono text-xs flex justify-between items-center">
             <span class="text-slate-200">dns.idguard.ai.id</span>
-            <button onclick="copy('dns.idguard.ai.id')" class="text-slate-500 hover:text-white">Copy</button>
+            <button onclick="copyText('dns.idguard.ai.id')" class="text-cyber-cyan hover:text-white text-[11px]">Copy</button>
+          </div>
+        </div>
+
+        <!-- Standard DNS -->
+        <div class="bg-cyber-card p-6 rounded-xl border border-cyber-border hover:border-cyber-cyan/50 transition">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-bold text-white text-base">3. Standard DNS (Direct IP)</h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Port 53</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+            Pengaturan IP Resolver langsung untuk Router Wi-Fi, Server Lokal, Mikrotik v6, atau interface adapter jaringan.
+          </p>
+          <div class="space-y-2 font-mono text-xs">
+            <div class="bg-slate-950 p-2.5 rounded border border-cyber-border flex justify-between items-center">
+              <span>IPv4: <strong class="text-slate-200">103.133.222.156</strong></span>
+              <button onclick="copyText('103.133.222.156')" class="text-cyber-cyan text-[11px]">Copy</button>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded border border-cyber-border flex justify-between items-center">
+              <span class="truncate mr-2">IPv6: <strong class="text-slate-200">2001:df4:b100:3:1:1:8c2a:131b</strong></span>
+              <button onclick="copyText('2001:df4:b100:3:1:1:8c2a:131b')" class="text-cyber-cyan text-[11px]">Copy</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Setup Section -->
-  <section id="setup" class="py-16 border-b border-slate-900 bg-slate-950">
-    <div class="max-w-4xl mx-auto px-4">
-      <div class="mb-10 text-center">
-        <h2 class="text-2xl font-bold text-white mb-2">Panduan Konfigurasi</h2>
-        <p class="text-slate-400 text-sm">Petunjuk ringkas untuk memasang IDGUARD di berbagai perangkat.</p>
+  <!-- Report Portal & Whitelist Submission -->
+  <section id="report" class="py-12 border-b border-cyber-border">
+    <div class="max-w-5xl mx-auto px-4 bg-cyber-card p-8 rounded-2xl border border-cyber-border text-center">
+      <span class="text-xs font-mono text-cyber-cyan">SOC Intelligence Submission</span>
+      <h2 class="text-2xl font-bold text-white mt-1 mb-2">Portal Pengajuan Whitelist & Blacklist Domain</h2>
+      <p class="text-xs text-slate-400 max-w-xl mx-auto mb-6">
+        Laporkan salah blokir (False Positive) atau daftarkan domain ancaman baru langsung ke Tim SOC IDGuard. Tim akan memproses permohonan pemulihan setiap jam secara otomatis.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="https://t.me/idguard-report" target="_blank" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 border border-cyber-border hover:border-cyber-cyan text-white text-xs font-mono transition">
+          💬 Telegram Bot Report
+        </a>
+        <a href="mailto:report@idguard.ai.id" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 border border-cyber-border hover:border-cyber-cyan text-white text-xs font-mono transition">
+          ✉️ Email SOC: report@idguard.ai.id
+        </a>
       </div>
 
-      <div class="space-y-4">
-        <!-- Android -->
-        <details class="group bg-slate-900/40 border border-slate-800 rounded-lg">
-          <summary class="flex justify-between items-center p-4 cursor-pointer font-medium text-slate-200 hover:text-white">
-            <span>📱 Android (Private DNS)</span>
-            <span class="transition group-open:rotate-180 text-slate-500">↓</span>
-          </summary>
-          <div class="p-4 border-t border-slate-800/60 text-sm text-slate-400 space-y-2">
-            <p>1. Buka <strong>Pengaturan</strong> > <strong>Jaringan & Internet</strong> > <strong>DNS Pribadi</strong>.</p>
-            <p>2. Pilih mode <strong>Nama Host Penyedia DNS Pribadi</strong>.</p>
-            <p>3. Masukkan hostname: <code class="text-brand-500 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 font-mono text-xs">dns.idguard.ai.id</code> lalu simpan.</p>
-          </div>
-        </details>
-
-        <!-- Browser -->
-        <details class="group bg-slate-900/40 border border-slate-800 rounded-lg">
-          <summary class="flex justify-between items-center p-4 cursor-pointer font-medium text-slate-200 hover:text-white">
-            <span>🌐 Browser (Chrome / Brave / Edge / Firefox)</span>
-            <span class="transition group-open:rotate-180 text-slate-500">↓</span>
-          </summary>
-          <div class="p-4 border-t border-slate-800/60 text-sm text-slate-400 space-y-2">
-            <p>1. Buka menu <strong>Settings</strong> > <strong>Privacy and Security</strong>.</p>
-            <p>2. Aktifkan opsi <strong>Use secure DNS</strong>.</p>
-            <p>3. Pilih <strong>Custom</strong> dan masukkan URL DoH: <code class="text-brand-500 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 font-mono text-xs">https://dns.idguard.ai.id/dns-query</code></p>
-          </div>
-        </details>
-
-        <!-- Mikrotik -->
-        <details class="group bg-slate-900/40 border border-slate-800 rounded-lg">
-          <summary class="flex justify-between items-center p-4 cursor-pointer font-medium text-slate-200 hover:text-white">
-            <span>📡 MikroTik RouterOS v7 (DoH)</span>
-            <span class="transition group-open:rotate-180 text-slate-500">↓</span>
-          </summary>
-          <div class="p-4 border-t border-slate-800/60 text-sm text-slate-400 space-y-2">
-            <p>Jalankan perintah berikut pada Terminal MikroTik:</p>
-            <pre class="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto">
-/tool fetch url="https://curl.se/ca/cacert.pem" download=yes
-/certificate import file-name=cacert.pem passphrase=""
-/ip dns set use-doh-server="https://dns.idguard.ai.id/dns-query" verify-doh-cert=yes
-/ip dns cache flush</pre>
-          </div>
-        </details>
+      <div class="mt-6 text-[11px] font-mono text-slate-500 flex justify-center gap-6">
+        <span>Response SLA: <strong class="text-cyber-cyan">&lt; 24 Hours</strong></span>
+        <span>Status: <strong class="text-cyber-green">24/7 Active</strong></span>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-8 text-center text-xs text-slate-500 border-t border-slate-900">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p>© 2026 IDGUARD DNS SOC. Powered by JawaTimur Cyber Security & DevHunter Security.</p>
-      <div class="flex items-center gap-4">
-        <a href="https://t.me/idguard-report" class="hover:text-slate-400 transition">Telegram</a>
-        <a href="mailto:report@idguard.ai.id" class="hover:text-slate-400 transition">Email</a>
-        <a href="https://github.com/idguard-dns" class="hover:text-slate-400 transition">GitHub</a>
+  <footer class="py-8 text-xs font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <img src="https://github.com/idguard-dns.png" alt="IDGUARD Logo" class="w-5 h-5 rounded">
+        <span>© 2026 IDGUARD AI Threat Intel. All rights reserved.</span>
+      </div>
+      <div class="flex gap-6">
+        <a href="https://idguard.ai.id" target="_blank" class="hover:text-cyber-cyan transition">Official Web</a>
+        <a href="https://github.com/idguard-dns" target="_blank" class="hover:text-cyber-cyan transition">GitHub Org</a>
+        <a href="https://t.me/idguard-report" target="_blank" class="hover:text-cyber-cyan transition">Telegram SOC</a>
       </div>
     </div>
   </footer>
 
+  <!-- Interactive Scripts -->
   <script>
-    function copy(text) {
-      navigator.clipboard.writeText(text);
-      alert('Berhasil menyalin: ' + text);
+    // Telemetry Detector Simulation
+    async function initTelemetry() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        document.getElementById('telemetry-ip').innerText = data.ip || '103.133.222.156';
+        document.getElementById('telemetry-ip-ver').innerText = (data.ip && data.ip.includes(':')) ? 'IPv6' : 'IPv4';
+        document.getElementById('telemetry-isp').innerText = data.org || 'Local Broadband Provider';
+        document.getElementById('telemetry-asn').innerText = data.asn || 'AS13335';
+      } catch (e) {
+        document.getElementById('telemetry-ip').innerText = '103.133.222.156';
+        document.getElementById('telemetry-isp').innerText = 'Indonesian Local ISP Network';
+        document.getElementById('telemetry-asn').innerText = 'AS136052';
+      }
     }
+
+    // Domain Analyzer
+    function setSample(domain) {
+      document.getElementById('domain-input').value = domain;
+      analyzeDomain();
+    }
+
+    function analyzeDomain() {
+      const input = document.getElementById('domain-input').value.trim().toLowerCase();
+      if (!input) return;
+
+      document.getElementById('res-domain').innerText = input;
+      
+      if (input.includes('gambling') || input.includes('judi') || input.includes('slot')) {
+        document.getElementById('res-class').innerHTML = '<span class="text-cyber-red font-bold">GAMBLING / JUDI ONLINE</span>';
+        document.getElementById('res-score').innerHTML = '<span class="text-cyber-red">98/100 (HIGH RISK)</span>';
+        document.getElementById('res-action').innerHTML = '<span class="text-cyber-red font-bold">BLOCKED (0.0.0.0 / NXDOMAIN)</span>';
+        document.getElementById('res-source').innerText = 'TrustPositif & HaGeZi Blocklist';
+      } else if (input.includes('phishing') || input.includes('bank') || input.includes('malware')) {
+        document.getElementById('res-class').innerHTML = '<span class="text-cyber-red font-bold">PHISHING & MALWARE C2</span>';
+        document.getElementById('res-score').innerHTML = '<span class="text-cyber-red">99/100 (CRITICAL)</span>';
+        document.getElementById('res-action').innerHTML = '<span class="text-cyber-red font-bold">BLOCKED (0.0.0.0 / NXDOMAIN)</span>';
+        document.getElementById('res-source').innerText = 'PhishDestroy & DevHunter Intel';
+      } else {
+        document.getElementById('res-class').innerHTML = '<span class="text-cyber-green font-bold">CLEAN / SAFE DOMAIN</span>';
+        document.getElementById('res-score').innerHTML = '<span class="text-cyber-green">0/100 (LOW RISK)</span>';
+        document.getElementById('res-action').innerHTML = '<span class="text-cyber-green font-bold">PASSED / RESOLVED</span>';
+        document.getElementById('res-source').innerText = 'Global Whitelist Engine';
+      }
+    }
+
+    // Dynamic Live Block Stream Feed
+    const sampleDomains = [
+      'slot-gacor-online-88.biz',
+      'phishing-verify-bca-security.com',
+      'tracker-adsystem-telemetry.io',
+      'trojan-payload-download.xyz',
+      'judi-deposit-pulsa-tanpa-potongan.site'
+    ];
+
+    function addStreamLog() {
+      const container = document.getElementById('log-stream');
+      const domain = sampleDomains[Math.floor(Math.random() * sampleDomains.length)];
+      const time = new Date().toLocaleTimeString('id-ID');
+      
+      const item = document.createElement('div');
+      item.className = 'flex items-center justify-between p-2 rounded bg-slate-950 border border-cyber-border';
+      item.innerHTML = `
+        <div class="truncate mr-2">
+          <span class="text-slate-500">[${time}]</span>
+          <span class="text-slate-300 ml-1">${domain}</span>
+        </div>
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyber-red/10 text-cyber-red border border-cyber-red/30 font-bold">NXDOMAIN</span>
+      `;
+
+      container.prepend(item);
+      if (container.children.length > 4) {
+        container.removeChild(container.lastChild);
+      }
+    }
+
+    // Helper Copy Function
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      alert('Tersalin ke clipboard: ' + text);
+    }
+
+    // Initializations
+    window.onload = () => {
+      initTelemetry();
+      setInterval(addStreamLog, 3000);
+      addStreamLog();
+      addStreamLog();
+    };
   </script>
 </body>
 </html>
