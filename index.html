@@ -40,8 +40,6 @@
         radial-gradient(circle at 80% 20%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
     }
     .glow-cyan { box-shadow: 0 0 20px rgba(0, 240, 255, 0.15); }
-    .glow-green { box-shadow: 0 0 20px rgba(0, 255, 106, 0.15); }
-    .border-glow:hover { border-color: rgba(0, 240, 255, 0.4); }
   </style>
 </head>
 <body class="text-slate-200 font-sans antialiased selection:bg-cyber-cyan selection:text-slate-950">
@@ -69,7 +67,8 @@
   <header class="border-b border-cyber-border bg-cyber-bg/80 backdrop-blur sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="https://github.com/idguard-dns.png" alt="IDGUARD Logo" class="w-9 h-9 rounded-lg border border-cyber-cyan/40 p-0.5">
+        <!-- High-Resolution HD Avatar Source -->
+        <img src="https://avatars.githubusercontent.com/u/198758830?s=400&v=4" alt="IDGUARD Logo" class="w-9 h-9 rounded-lg border border-cyber-cyan/40 bg-slate-900 object-contain shadow-sm">
         <div>
           <div class="flex items-center gap-2">
             <span class="font-extrabold text-lg text-white tracking-wider">IDGUARD</span>
@@ -80,11 +79,11 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="#report" class="text-xs font-mono px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-slate-300 hover:text-white transition">
-          ⚠️ Report Domain
+        <a href="#endpoints" class="text-xs font-mono px-3 py-1.5 text-slate-300 hover:text-cyber-cyan transition">
+          Endpoint DNS
         </a>
-        <a href="#analyzer" class="text-xs font-mono px-3.5 py-1.5 rounded-lg bg-cyber-cyan text-slate-950 font-bold hover:bg-cyan-300 transition glow-cyan">
-          ⚡ Threat Simulator
+        <a href="#report" class="text-xs font-mono px-3.5 py-1.5 rounded-lg bg-cyber-cyan text-slate-950 font-bold hover:bg-cyan-300 transition glow-cyan">
+          ⚠️ Report Domain
         </a>
       </div>
     </div>
@@ -170,85 +169,8 @@
     </div>
   </section>
 
-  <!-- AI Threat Intelligence Analyzer & Live Block Stream -->
-  <section id="analyzer" class="py-12 border-b border-cyber-border">
-    <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-8">
-      
-      <!-- Interactive Domain Analyzer -->
-      <div class="lg:col-span-7 bg-cyber-card p-6 rounded-2xl border border-cyber-border glow-cyan">
-        <div class="text-xs font-mono text-cyber-cyan mb-1">Interactive SOC Tool</div>
-        <h3 class="text-lg font-bold text-white mb-2">🔍 AI Threat Intelligence Domain Analyzer</h3>
-        <p class="text-xs text-slate-400 mb-6">
-          Masukkan domain untuk menguji klasifikasi AI Threat Engine secara langsung terhadap database blocklist IDGuard (PhishDestroy, HaGeZi, TrustPositif, SmartDNS, OISD).
-        </p>
-
-        <div class="flex gap-2 mb-6">
-          <input type="text" id="domain-input" placeholder="Contoh: malware-site.com atau google.com" class="flex-1 bg-slate-950 border border-cyber-border focus:border-cyber-cyan rounded-lg px-4 py-2.5 text-xs font-mono text-white focus:outline-none">
-          <button onclick="analyzeDomain()" class="px-5 py-2.5 rounded-lg bg-cyber-cyan text-slate-950 font-bold font-mono text-xs hover:bg-cyan-300 transition">
-            Analyze
-          </button>
-        </div>
-
-        <!-- Analyzer Result Output -->
-        <div class="bg-slate-950 p-4 rounded-xl border border-cyber-border font-mono text-xs space-y-2.5">
-          <div class="flex justify-between border-b border-slate-800/80 pb-2">
-            <span class="text-slate-400">Queried Domain:</span>
-            <span id="res-domain" class="text-white font-bold">--</span>
-          </div>
-          <div class="flex justify-between border-b border-slate-800/80 pb-2">
-            <span class="text-slate-400">Threat Classification:</span>
-            <span id="res-class" class="text-slate-300">--</span>
-          </div>
-          <div class="flex justify-between border-b border-slate-800/80 pb-2">
-            <span class="text-slate-400">Threat Severity Score:</span>
-            <span id="res-score" class="text-slate-300">--</span>
-          </div>
-          <div class="flex justify-between border-b border-slate-800/80 pb-2">
-            <span class="text-slate-400">Unbound DNS Action:</span>
-            <span id="res-action" class="text-slate-300">--</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Intelligence Source:</span>
-            <span id="res-source" class="text-slate-300">--</span>
-          </div>
-        </div>
-
-        <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-mono text-slate-400">
-          <span>Test Samples:</span>
-          <button onclick="setSample('gambling-site.id')" class="text-cyber-cyan hover:underline">gambling-site.id</button> •
-          <button onclick="setSample('phishing-bank-login.com')" class="text-cyber-cyan hover:underline">phishing-bank-login.com</button> •
-          <button onclick="setSample('idguard.ai.id')" class="text-cyber-cyan hover:underline">idguard.ai.id</button>
-        </div>
-      </div>
-
-      <!-- Live Block Stream Feed -->
-      <div class="lg:col-span-5 bg-cyber-card p-6 rounded-2xl border border-cyber-border flex flex-col justify-between">
-        <div>
-          <div class="flex justify-between items-center mb-3">
-            <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-cyber-red animate-ping"></span>
-              <h3 class="text-sm font-bold font-mono text-white">Live Blocked Threats Stream</h3>
-            </div>
-            <span class="text-[10px] font-mono text-slate-500">Real-time Feed</span>
-          </div>
-          <p class="text-xs text-slate-400 mb-4">Aktivitas mitigasi ancaman otomatis oleh engine DNS Unbound.</p>
-
-          <div id="log-stream" class="space-y-2 font-mono text-[11px] max-h-[220px] overflow-hidden">
-            <!-- Dynamic JS Logs inserted here -->
-          </div>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-cyber-border flex justify-between text-[11px] font-mono text-slate-400">
-          <span>Filter Engine: <strong class="text-cyber-red">NXDOMAIN Always</strong></span>
-          <span class="text-cyber-green">● Active Protection</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- Endpoint Protocols -->
-  <section class="py-12 border-b border-cyber-border bg-slate-950/40">
+  <section id="endpoints" class="py-12 border-b border-cyber-border bg-slate-950/40">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center max-w-2xl mx-auto mb-10">
         <span class="text-xs font-mono text-cyber-cyan">Deployment Integration</span>
@@ -340,7 +262,7 @@
   <footer class="py-8 text-xs font-mono text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-2">
-        <img src="https://github.com/idguard-dns.png" alt="IDGUARD Logo" class="w-5 h-5 rounded">
+        <img src="https://avatars.githubusercontent.com/u/198758830?s=400&v=4" alt="IDGUARD Logo" class="w-5 h-5 rounded object-contain">
         <span>© 2026 IDGUARD AI Threat Intel. All rights reserved.</span>
       </div>
       <div class="flex gap-6">
@@ -353,7 +275,6 @@
 
   <!-- Interactive Scripts -->
   <script>
-    // Telemetry Detector Simulation
     async function initTelemetry() {
       try {
         const res = await fetch('https://ipapi.co/json/');
@@ -369,78 +290,13 @@
       }
     }
 
-    // Domain Analyzer
-    function setSample(domain) {
-      document.getElementById('domain-input').value = domain;
-      analyzeDomain();
-    }
-
-    function analyzeDomain() {
-      const input = document.getElementById('domain-input').value.trim().toLowerCase();
-      if (!input) return;
-
-      document.getElementById('res-domain').innerText = input;
-      
-      if (input.includes('gambling') || input.includes('judi') || input.includes('slot')) {
-        document.getElementById('res-class').innerHTML = '<span class="text-cyber-red font-bold">GAMBLING / JUDI ONLINE</span>';
-        document.getElementById('res-score').innerHTML = '<span class="text-cyber-red">98/100 (HIGH RISK)</span>';
-        document.getElementById('res-action').innerHTML = '<span class="text-cyber-red font-bold">BLOCKED (0.0.0.0 / NXDOMAIN)</span>';
-        document.getElementById('res-source').innerText = 'TrustPositif & HaGeZi Blocklist';
-      } else if (input.includes('phishing') || input.includes('bank') || input.includes('malware')) {
-        document.getElementById('res-class').innerHTML = '<span class="text-cyber-red font-bold">PHISHING & MALWARE C2</span>';
-        document.getElementById('res-score').innerHTML = '<span class="text-cyber-red">99/100 (CRITICAL)</span>';
-        document.getElementById('res-action').innerHTML = '<span class="text-cyber-red font-bold">BLOCKED (0.0.0.0 / NXDOMAIN)</span>';
-        document.getElementById('res-source').innerText = 'PhishDestroy & DevHunter Intel';
-      } else {
-        document.getElementById('res-class').innerHTML = '<span class="text-cyber-green font-bold">CLEAN / SAFE DOMAIN</span>';
-        document.getElementById('res-score').innerHTML = '<span class="text-cyber-green">0/100 (LOW RISK)</span>';
-        document.getElementById('res-action').innerHTML = '<span class="text-cyber-green font-bold">PASSED / RESOLVED</span>';
-        document.getElementById('res-source').innerText = 'Global Whitelist Engine';
-      }
-    }
-
-    // Dynamic Live Block Stream Feed
-    const sampleDomains = [
-      'slot-gacor-online-88.biz',
-      'phishing-verify-bca-security.com',
-      'tracker-adsystem-telemetry.io',
-      'trojan-payload-download.xyz',
-      'judi-deposit-pulsa-tanpa-potongan.site'
-    ];
-
-    function addStreamLog() {
-      const container = document.getElementById('log-stream');
-      const domain = sampleDomains[Math.floor(Math.random() * sampleDomains.length)];
-      const time = new Date().toLocaleTimeString('id-ID');
-      
-      const item = document.createElement('div');
-      item.className = 'flex items-center justify-between p-2 rounded bg-slate-950 border border-cyber-border';
-      item.innerHTML = `
-        <div class="truncate mr-2">
-          <span class="text-slate-500">[${time}]</span>
-          <span class="text-slate-300 ml-1">${domain}</span>
-        </div>
-        <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyber-red/10 text-cyber-red border border-cyber-red/30 font-bold">NXDOMAIN</span>
-      `;
-
-      container.prepend(item);
-      if (container.children.length > 4) {
-        container.removeChild(container.lastChild);
-      }
-    }
-
-    // Helper Copy Function
     function copyText(text) {
       navigator.clipboard.writeText(text);
       alert('Tersalin ke clipboard: ' + text);
     }
 
-    // Initializations
     window.onload = () => {
       initTelemetry();
-      setInterval(addStreamLog, 3000);
-      addStreamLog();
-      addStreamLog();
     };
   </script>
 </body>
